@@ -1,0 +1,35 @@
+--- ./lsb_release.no-support	2011-01-27 10:13:30.000000000 -0500
++++ ./lsb_release	2011-01-27 10:13:36.000000000 -0500
+@@ -193,18 +193,23 @@ GetLSBInfo() {
+         # should init at least LSB_VERSION
+         . "$INFO_ROOT/$INFO_LSB_FILE"
+     fi
++    # continue to look in directory
++    if [ -d "$INFO_ROOT/$INFO_LSB_DIR" ]
++    then
++	for tag in "$INFO_ROOT/$INFO_LSB_DIR/"*
++	do
++	    if [ -z "$LSB_VERSION" ]
++	    then
++		LSB_VERSION=`basename $tag`
++	    else
++		LSB_VERSION=$LSB_VERSION:`basename $tag`
++	    fi
++	done
++    fi
++    # no result case
+     if [ -z "$LSB_VERSION" ]
+     then
+ 	LSB_VERSION=$MSG_NA
+-    else
+-	# if we found LSB_VERSION, continue to look in directory
+-	if [ -d "$INFO_ROOT/$INFO_LSB_DIR" ]
+-	then
+-	    for tag in "$INFO_ROOT/$INFO_LSB_DIR/"*
+-	    do
+-		LSB_VERSION=$LSB_VERSION:`basename $tag`
+-	    done
+-	fi
+     fi
+ }
+ 
